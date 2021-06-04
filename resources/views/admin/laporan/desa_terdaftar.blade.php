@@ -21,6 +21,43 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="col-lg-8">
+                            <form class="form-horizontal" method="get"
+                                action="{{ url('admin/laporan/desa-terdaftar') }}">
+
+
+                                <div class="form-group row align-items-center">
+                                    <label class="col-sm-3 col-form-label text-label">Nama Peserta</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                value="{{ $inputCallback['namainstansi'] }}" name="namainstansi"
+                                                id="namainstansi" placeholder="Nama Peserta"
+                                                aria-describedby="namainstansi">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group row align-items-center">
+                                    <label class="col-sm-3 col-form-label text-label"></label>
+                                    <div class="col-sm-9">
+                                        <button type="submit" class="btn btn-xs btn-primary">Cari Data</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead style="background-color: #283593; color: #fff; padding: 5px">

@@ -82,6 +82,8 @@ class AdminController extends Controller
             exit();
         }
 
+        $namainstansi = $request->input("namainstansi");
+
         $this->instansi = DB::table("mst_instansi as i")
                         ->select( "i.id_instansi", "i.nama_instansi as nama", "i.id_provinsi", "i.id_kabupaten", 
                         "p.nama_propinsi as prov", "kb.nama_kabupaten as kab", "kc.nama_kecamatan as kec", 
@@ -90,7 +92,10 @@ class AdminController extends Controller
                         ->join("mst_provinsi as p", "i.id_provinsi","=","p.kode_propinsi")
                         ->join("mst_kabupaten as kb", "i.id_kabupaten","=","kb.kode_kabupaten")
                         ->join("mst_kecamatan as kc", "i.id_kecamatan","=","kc.kode_kecamatan")
-                        ->distinct("i.nama_instansi")
+                        ->when($namainstansi, function($query, $namainstansi){
+                            return $query->where("i.nama_instansi", "LIKE", $namainstansi."%");
+                         })
+
                         ->paginate(15);
 
         $this->id = $request->session()->get('idadmin');
@@ -101,7 +106,10 @@ class AdminController extends Controller
                                 
         $data = array(
             "instansi"   => $this->instansi,
-            "member"     => $this->getAdminData->first()
+            "member"     => $this->getAdminData->first(),
+            "inputCallback" => array(
+                "namainstansi" => $namainstansi
+            )
         );
 
         return view("admin.laporan.desa_terdaftar")->with($data);
@@ -109,6 +117,7 @@ class AdminController extends Controller
 
     public function lapdesaikutprogram(Request $request)
     {
+        $namainstansi = $request->input("namainstansi");
         $this->instansi = DB::table("trx_pemesanan as tp")
                         ->select("m.id_instansi", "i.id_provinsi", "i.id_kabupaten", 
                         "p.nama_propinsi as prov", "kb.nama_kabupaten as kab", "kc.nama_kecamatan as kec",
@@ -119,7 +128,10 @@ class AdminController extends Controller
                         ->join("mst_provinsi as p", "i.id_provinsi","=","p.kode_propinsi")
                         ->join("mst_kabupaten as kb", "i.id_kabupaten","=","kb.kode_kabupaten")
                         ->join("mst_kecamatan as kc", "i.id_kecamatan","=","kc.kode_kecamatan")
-                        ->distinct("i.nama_instansi")
+                        ->distinct("i.id_instansi")
+                        ->when($namainstansi, function($query, $namainstansi){
+                            return $query->where("i.nama_instansi", "LIKE", $namainstansi."%");
+                        })
                         ->paginate(15);
 
         $this->id = $request->session()->get('idadmin');
@@ -130,7 +142,10 @@ class AdminController extends Controller
 
         $data = array(
             "instansi"   => $this->instansi,
-            "member"     => $this->getAdminData->first()
+            "member"     => $this->getAdminData->first(),
+            "inputCallback" => array(
+                "namainstansi" => $namainstansi
+            )
         );
 
         return view("admin.laporan.desa_ikut_program")->with($data);
