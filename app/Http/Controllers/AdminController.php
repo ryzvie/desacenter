@@ -92,6 +92,7 @@ class AdminController extends Controller
                         ->join("mst_provinsi as p", "i.id_provinsi","=","p.kode_propinsi")
                         ->join("mst_kabupaten as kb", "i.id_kabupaten","=","kb.kode_kabupaten")
                         ->join("mst_kecamatan as kc", "i.id_kecamatan","=","kc.kode_kecamatan")
+                        ->distinct("i.id_instansi")
                         ->when($namainstansi, function($query, $namainstansi){
                             return $query->where("i.nama_instansi", "LIKE", $namainstansi."%");
                          })
