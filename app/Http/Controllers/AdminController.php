@@ -94,7 +94,7 @@ class AdminController extends Controller
                         ->join("mst_kecamatan as kc", "i.id_kecamatan","=","kc.kode_kecamatan")
                         ->distinct("i.id_instansi")
                         ->when($namainstansi, function($query, $namainstansi){
-                            return $query->where("i.nama_instansi", "LIKE", $namainstansi."%");
+                            return $query->where("i.nama_instansi", "LIKE", "%".$namainstansi."%");
                          })
 
                         ->paginate(15);
@@ -131,7 +131,7 @@ class AdminController extends Controller
                         ->join("mst_kecamatan as kc", "i.id_kecamatan","=","kc.kode_kecamatan")
                         ->distinct("i.id_instansi")
                         ->when($namainstansi, function($query, $namainstansi){
-                            return $query->where("i.nama_instansi", "LIKE", $namainstansi."%");
+                            return $query->where("i.nama_instansi", "LIKE", "%".$namainstansi."%");
                         })
                         ->paginate(15);
 
