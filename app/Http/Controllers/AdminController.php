@@ -57,7 +57,7 @@ class AdminController extends Controller
 
         if($request->session()->get('idadmin') === "")
         {
-            return view("admin.login")->with("status", "Session anda telah habis. Silahkan lakukan login kembali.");
+            return view("/")->with("status", "Session anda telah habis. Silahkan lakukan login kembali.");
             exit();
         }
 

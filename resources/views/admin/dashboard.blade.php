@@ -19,10 +19,11 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        tester
-                    </div>
+                <div style="text-align:center">
+                    <img style="width:50%;" src="{{ asset('assets/images/dashboard.svg') }}" />
+
+                    <div>Selamat Datang di halaman admin desacennter.id</div>
+                    <div></div>
                 </div>
             </div>
         </div>
