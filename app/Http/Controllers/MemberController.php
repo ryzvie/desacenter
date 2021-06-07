@@ -526,7 +526,7 @@ class MemberController extends Controller
               "no_wa_sekertaris"     => "+62".$this->input['nowasekertaris']
           ]);
 
-        return redirect("/profil/desa")->with("status", "Data informasi desa berhasil diupdate.");
+        return redirect("/profil/desa")->with("status", "Data informasi desa berhasil diupdate. Silahkan untuk mengikuti program menuju ke menu DASHBOARD");
     }
 
     public function infobumdes(Request $request)
