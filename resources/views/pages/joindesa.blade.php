@@ -107,12 +107,12 @@
                                     <form class="form-horizontal">
                                         @csrf
                                         <div class="form-group row align-items-center">
-                                            <label class="col-sm-2 col-form-label text-label">Nomor Registrasi Desa</label>
+                                            <label class="col-sm-2 col-form-label text-label">Nomor Registrasi Desa / Nama Desa</label>
                                             <div class="col-sm-6">
                                                 <div class="input-group">
-                                                    <input type="text" name="kodedesa"  class="form-control"  placeholder="Isikan Berdesarkan Kode Desa">
+                                                    <input type="text" name="kodedesa"  class="form-control"  placeholder="Isikan Berdesarkan Kode Desa / Nama Desa">
                                                 </div>
-                                                <div class="alert-warning" style="padding:5px; margin:5px 0px; font-size:14px;"> Jika diisi Nomor Registrasi Desa minimal 6 digit. Contoh : 11.01.01.2001</div>
+                                                <div class="alert-warning" style="padding:5px; margin:5px 0px; font-size:14px;"> Contoh pengisian kode desa : 11.01.01.2001</div>
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="box-tanya">
@@ -121,15 +121,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row align-items-center">
-                                            <label class="col-sm-2 col-form-label text-label">Nama Desa (Optional)</label>
-                                            <div class="col-sm-6">
-                                                <div class="input-group">
-                                                    <input type="text" name="namadesa"  class="form-control"  placeholder="Isikan Nama Desa">
-                                                </div>
-                                            </div>
-                                            
-                                        </div>
+                                        
 
                                         <div class="form-group row align-items-center">
                                             <label class="col-sm-2 col-form-label text-label"></label>
@@ -229,24 +221,13 @@
     {
         var _token    = $("input[name='_token']").val();
         var kodedesa  = $("input[name='kodedesa']").val();
-        var namadesa  = $("input[name='namadesa']").val();
 
-        var valid = (kodedesa == "" && namadesa == "");
+        var valid = (kodedesa == "");
 
         if(valid)
         {
             alert("Silahkan untuk masukan kode desa atau nama desa.");
             return false;
-        }
-
-        if(kodedesa != "")
-        {
-            if(kodedesa.length < 8)
-            {
-                alert("kode desa minimal 6 digit");
-                return false;
-            }
-            
         }
 
         $.ajax({
@@ -255,8 +236,7 @@
             dataType : "JSON",
             data : {
                 _token : _token,
-                kodedesa : kodedesa,
-                namadesa : namadesa
+                kodedesa : kodedesa
             },
             beforeSend : function(xhr)
             {
