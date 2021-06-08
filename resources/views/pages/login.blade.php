@@ -59,12 +59,15 @@
                                         <input type="tel" minlength="6" maxlength="6" class="form-control" placeholder="6 Digit Kode OTP" name="otp" id="otp">
                                     </div>
 
-                                    <div class="text-center mb-4 mt-4">
-                                        <button type="button" class="btn btn-primary" id="btn-masuk"> Masuk</button>
-                                        <button type="button" class="btn btn-primary" id="btn-verifikasi"> Verifikasi</button>
+                                    <div class="form-group">
+                                        <div class="recaptcha-container" id="recaptcha-container" ></div>
                                     </div>
 
-                                    <div class="recaptcha-container" id="recaptcha-container" style="display: none;"></div>
+                                    <div class="text-center mb-4 mt-4">
+                                        <button type="button" onclick="onSignInSubmit(this)" class="btn btn-primary" id="btn-masuk"> Masuk</button>
+                                        <button type="button" disabled class="btn btn-primary" id="btn-verifikasi"> Verifikasi</button>
+                                    </div>
+
                                 </form>
                                 <div class="text-center">
                                     <h5 class="mb-5">Atau masuk dengan</h5>

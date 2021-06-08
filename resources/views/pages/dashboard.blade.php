@@ -3,7 +3,7 @@
 
 @section('autentikasiuser')
 
-    @if($member->email == NULL)
+    @if($member->nama == NULL)
     <div class="alert alert-danger" style="font-size:14px;">
         Profil anda belum lengkap. Silahkan untuk melengkapi profil terlebih dahulu.
     </div>
@@ -24,7 +24,7 @@
 
     .box-relative{
         position:relative;
-        padding:20px 0px;
+        padding:15px 0px;
         margin-top:15px;
     }
 
@@ -41,7 +41,7 @@
         top:6px;
         background:#fff;
         z-index:9;
-        left:10px;
+        left:45%;
     }
     
     .border-dot{
@@ -52,11 +52,20 @@
         top:15px;
     }
 
+    .border-solid{
+        border-top:8px solid #00b000;
+        width: 100%;
+        position: absolute;
+        left:0px;
+        top:11px;
+        border-radius:100px;
+    }
+
     .text-step{
         padding:5px 15px;
         color:#000;
         font-size:13px;
-        color:#fff;
+        color:#000;
         text-align: center;
     }
 
@@ -111,13 +120,27 @@
             
         </div>
 
-        
 
         <div class="row">
 
             <div class="col-lg-12">
                 <!--- startcol  -->
+                @if( Session::has('status') )
+                    <div class="alert alert-success" style="font-size:14px;">
+                        {{ Session('status') }}
+                    </div>
+                @endif
                 @yield('autentikasiuser')
+
+                @if($member->email != "")
+                    @if(!$member->is_verifikasi_email)
+                    <div class="alert alert-danger sr-only" style="font-size:14px; text-align:center;">
+                        Email anda belum di verifikasi.
+                        <br>
+                        <a type="button" class="btn btn-xs btn-danger mt-3" href="{{ url('profil/akun') }}"> Verifikasi Sekarang > </a>
+                    </div>
+                    @endif
+                @endif
 
                 <div class="card">
                     <div class="card-body">
@@ -126,54 +149,86 @@
                                 <div class="col-lg-12">
                                     <h5>Selamat, Datang <span style="text-transform:uppercase">{{ $member->nama }}</span> !</h5>
                                     
-                                    
                                     <div class="rows">
                                         <div class="box-step">
                                             <div style="color:#000;">Silahkan lengkapi profil Berikut ini : </div>
-                                            @php
-                                                $step1 = ($step['profil']['status'] == true) ? "#48bc48" : "#ff906f";
-                                                $step2 = ($step['joindesa']['status'] == true) ? "#48bc48" : "#ff906f";
-                                                $step3 = ($step['profildesa']['status'] == true) ? "#48bc48" : "#ff906f";
-                                                $step4 = ($step['profilbumdes']['status'] == true) ? "#48bc48" : "#ff906f";
-
-                                                
-                                            @endphp
+                                            
                                             <div class="box-steps">
                                                 <div class="d-flex flex-column flex-md-row justify-content-between bd-highlight mb-3">
                                                     <div class="bd-highlight box-steps">
+                                                        
                                                         <div class="box-relative">
                                                             <div class="dot"></div>
-                                                            <div class="border-dot"></div>
+                                                            @if($step >= 1)
+                                                                <div class="border-solid"></div>
+                                                            @else
+                                                                <div class="border-dot"></div>
+                                                            @endif
                                                         </div>
+                                                        <div class="text-step">
+                                                            <a href="{{ url('profil/akun') }}">Profil Pengguna</a>
+                                                        </div> 
                                                         <div style="clear:both;"></div>
-                                                        <div class="text-step" style="background:<?php echo $step1 ?>;" class="text-step">Profil Pengguna</div> 
                                                     </div>
                                                     <div class="bd-highlight box-steps">
+                                                        
                                                         <div class="box-relative">
                                                             <div class="dot"></div>
-                                                            <div class="border-dot"></div>
+                                                            @if($step >= 2)
+                                                                <div class="border-solid"></div>
+                                                            @else
+                                                                <div class="border-dot"></div>
+                                                            @endif
+                                                        </div>
+                                                        <div class="text-step">
+                                                            <a href="{{ url('join-desa') }}">Gabung Desa</a>
                                                         </div>
                                                         <div style="clear:both;"></div>
-                                                        <div class="text-step" style="background:<?php echo $step2 ?>;" class="text-step">Join Desa</div>
+                                                        
                                                     </div>
                                                     <div class="bd-highlight box-steps">
+
                                                         <div class="box-relative">
                                                             <div class="dot"></div>
-                                                            <div class="border-dot"></div>
+                                                            @if($step >= 3)
+                                                                <div class="border-solid"></div>
+                                                            @else
+                                                                <div class="border-dot"></div>
+                                                            @endif
                                                         </div>
+                                                        <div class="text-step">
+                                                            <a href="{{ url('program/lihatsemua') }}">Ikut Program</a>
+                                                        </div> 
                                                         <div style="clear:both;"></div>
-                                                        <div class="text-step" style="background:<?php echo $step3 ?>;" class="text-step text-center">Profil Desa</div> 
-                                                    </div>
-                                                    <div class="bd-highlight box-steps">
-                                                        <div class="box-relative">
-                                                            <div class="dot"></div>
-                                                            <div class="border-dot"></div>
-                                                        </div>
-                                                        <div style="clear:both;"></div>
-                                                        <div class="text-step" style="background:<?php echo $step4 ?>;" class="text-step">Profil Bumdes</div> 
                                                     </div>
                                                     <div class="bd-highlight box-steps" style="padding:10px;">
-                                                        <a type="button" href="{{ url('profil/akun') }}" class="btn btn-xs btn-info">Lengkapi Akun</a>
+
+                                                    @php
+                                                        
+                                                        if($step == 0)
+                                                        {
+                                                            $link = url('profil/akun');
+                                                            $text = "Lengkapi akun";
+                                                        }
+                                                        elseif($step == 1)
+                                                        {
+                                                            $link = url('join-desa');
+                                                            $text = "Gabung Desa";
+                                                        }
+                                                        elseif($step == 2)
+                                                        {
+                                                            $link = url('program/lihatsemua');
+                                                            $text = "Ikut Program";
+                                                        }
+                                                        else
+                                                        {
+                                                            $link = url('/dashboard');
+                                                            $text = "Selesai";
+                                                        }
+                                                    @endphp
+
+
+                                                        <a type="button" href="{{ $link }}" class="btn btn-xs btn-info">{{ '['.$step.'/3] '.$text }}</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,9 +249,10 @@
                     </div>
                 </div>
             </div> <!-- endcol-->
-        </div>
+        </div>                                            
+        
 
-        <div class="row">
+        <div class="sr-only row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -304,7 +360,6 @@
                                                     </div>
                                                 </div>
 
-                                                <a type="button" href="{{ url('program/form/'.$pesan->id_training) }}" class="btn btn-xs btn-info">Lihat Form Kesediaan</a>
                                             </div>
                                             
                                         </div>
@@ -319,7 +374,7 @@
                 
             </div>
 
-            <div class="col-lg-12">
+            <div class="sr-only col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <h5>Perlu Bantuan ?</h5>

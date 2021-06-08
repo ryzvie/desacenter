@@ -36,7 +36,7 @@
     <!--**********************************
         Main wrapper start
     ***********************************-->
-    <div id="main-wrapper">
+    <div id="main-wrapper" class="show">
 
         <!--**********************************
             Nav header start
@@ -115,19 +115,19 @@
                             <i class="mdi mdi-view-dashboard"></i><span class="nav-text">Dashboard</span>
                         </a>
                     </li>
-                    <li class="">
+                    <li class="sr-only">
                         <a class="" href="{{ url('/join-desa')}}" aria-expanded="false">
                             <i class="mdi mdi-account-box"></i><span class="nav-text">Join Desa</span>
                         </a>
                     </li>
 
-                    <li class="">
+                    <li class="sr-only">
                         <a class="" href="{{ url('/profil/desa')}}" aria-expanded="false">
                             <i class="mdi mdi-account-box"></i><span class="nav-text">Profil Desa</span>
                         </a>
                     </li>
 
-                    <li class="">
+                    <li class="sr-only">
                         <a class="" href="{{ url('/profil/bumdes')}}" aria-expanded="false">
                             <i class="mdi mdi-account-box"></i><span class="nav-text">Profil Bumdes</span>
                         </a>
@@ -157,7 +157,7 @@
                             @endforeach
                         </ul>
                     </li>
-                    <li class="">
+                    <li class="sr-only">
                         <a class="" href="javascript:void(0)" onclick="return alert('Fitur ini masih dalam pengembangan')" aria-expanded="false">
                             <i class="mdi mdi-help-circle"></i><span class="nav-text">Webinar / Training</span>
                         </a>

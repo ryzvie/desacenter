@@ -81,7 +81,7 @@
 
                         <div style="margin-top:10px;">
                             <a href="{{ url('dashboard') }}" class="btn btn-xs btn-primary">Kembali Ke Dashboard</a>
-                            <a href="{{ url('program/form/'.$idprogram) }}" class="btn btn-xs btn-info">Lihat Formulir Kesediaan</a>
+                            <a href="{{ url('program/form/'.$idprogram) }}" class="sr-only btn btn-xs btn-info">Lihat Formulir Kesediaan</a>
                         </div>
                     </div>  
                 </div>

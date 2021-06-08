@@ -38,13 +38,6 @@ class MemberController extends Controller
         // return view('layoutmain.main');
     }
 
-    public function apa(Request $request){
-
-        
-       
-        return view('layoutsubmain.layoutsub');
-    }
-
 
     public function login1(Request $request){
 
@@ -164,56 +157,51 @@ class MemberController extends Controller
         $this->uid = $request->session()->get("uid");
 
         $this->member = DB::table("mst_member as a")
-                          ->select("a.uid as uid","a.email", "a.id", "a.nama", "a.telp", "a.foto")
                           ->where("a.uid", $this->uid)
                           ->get();
 
         $this->stepprofil = DB::table("mst_member as a")
                             ->select(
                                 "a.email as email",
+                                "a.nama as nama",
                                 "a.id_instansi as id_instansi",
                                 "b.user_entry as entry_desa",
-                                "c.user_entry as entry_bumdes",
-                                "b.nama_kepala as namakepala"
+                                "b.nama_kepala as namakepala",
+                                DB::raw("(SELECT COUNT(aa.id_member) FROM trx_pemesanan aa
+                                WHERE aa.id_member = a.id) as jml")
                             )
                             ->leftJoin("mst_instansi as b", "b.id_instansi", "=", "a.id_instansi")
-                            ->leftJoin("mst_instansi_det as c", "c.id_instansi", "=", "b.id_instansi")
                             ->where("a.uid", $this->uid)
                             ->get()->first();
 
-        $statusprofil = (@$this->stepprofil->email != "" ) ? true : false;
-        $statusjoindesa = (@$this->stepprofil->id_instansi != 0 ) ? true : false;
-        $statusprofildesa = (@$this->stepprofil->namakepala != "" ) ? true : false;
-        $statusprofilbumdes = (@$this->stepprofil->entry_bumdes != 0 ) ? true : false;
+        // $statusprofil = (@$this->stepprofil->email != "" ) ? true : false;
+        // $statusjoindesa = (@$this->stepprofil->id_instansi != 0 ) ? true : false;
+        // $statusprofildesa = (@$this->stepprofil->namakepala != "" ) ? true : false;
+        // $statusprofilbumdes = (@$this->stepprofil->entry_bumdes != 0 ) ? true : false;
+
+        $statusprofil   = ($this->stepprofil->nama != "" ) ? 1 : 0;
+        $statusjoindesa = ($this->stepprofil->id_instansi != 0 ) ? 1 : 0;
+        $statusikutprogram = ($this->stepprofil->jml > 0 ) ? 1 : 0;
+        //$statusprofildesa = (@$this->stepprofil->namakepala != "" ) ? 1 : 0;
+        //$statusprofilbumdes = (@$this->stepprofil->entry_bumdes != 0 ) ? true : false;
+
+        $nilai = 0;
+        $nilai = $statusprofil + $statusjoindesa + $statusikutprogram;
 
 
         $this->pemesanan = DB::table("trx_pemesanan as a")
                            ->join("mst_training as b","b.id", "=", "a.id_training")
                            ->where("a.id_member", $this->member->first()->id)
                            ->get();
+        
+        
 
         $data = array(
             "member" => $this->member->first(),
             "program" => $this->program,
             "pemesanan" => $this->pemesanan,
-            "step" => array(
-                "profil" => array(
-                    "status" => $statusprofil,
-                    "link"   => "/profil/akun"
-                ),
-                "joindesa" => array(
-                    "status" => $statusjoindesa,
-                    "link"   => "/join-desa"
-                ),
-                "profildesa" => array(
-                    "status" => $statusprofildesa,
-                    "link"   => "/profil/desa"
-                ),
-                "profilbumdes" => array(
-                    "status" => $statusprofilbumdes,
-                    "link"   => "/profil/bumdes"
-                )
-            )
+            "step"      => $nilai
+
         );
 
         return view("pages.dashboard")->with($data);
@@ -433,7 +421,6 @@ class MemberController extends Controller
                           ->get();
 
         $this->member = DB::table("mst_member as a")
-                        ->select("a.uid as uid","a.email", "a.nama", "a.telp", "a.foto")
                         ->where("a.uid", $this->uid)
                         ->get();
 
@@ -450,14 +437,12 @@ class MemberController extends Controller
 
     public function updateProfil(Request $request)
     {
-        //echo "<pre>";print_r($request->file->getClientOriginalName());"</pre>";
-
+       
         $this->input = $request->input();
         $name = "";
 
         $request->validate([
-            "nama"  => "required",
-            "email" => "required|email"
+            "nama"  => "required"
         ]);
 
         $this->nama   = $this->input['nama'];
@@ -465,17 +450,20 @@ class MemberController extends Controller
         $this->alamat = $this->input['alamat'];
 
         $this->uid    = $request->session()->get('uid');
-
-        if($request->file())
+        
+        
+        if($request->file('file'))
         {
             $request->validate([
-                'file' => 'required|mimes:png,jpg,jpeg,csv,txt,xlx,xls,pdf|max:2048'
+                'file' => 'required|mimes:png,jpg,jpeg,csv,txt,xlx,xls,pdf'
             ]);
 
             $name = $this->uid.'_'.$request->file->getClientOriginalName();
-            $filePath = $request->file('file')->storeAs('public/upload', $name);
+            $filePath = $request->file->move(public_path('upload/profil'), $name);
 
             $data['foto'] = $name;
+
+            
         }
 
         $data['nama'] = $this->nama;
@@ -491,16 +479,31 @@ class MemberController extends Controller
                           ->where("uid", $request->session()->get("uid"))
                           ->get();
 
-        if($this->member->first()->id_instansi != NULL)
-        {
-            return redirect("/profil/akun")->with("status", "Data profil akun Berhasil diupdate.");
+        return redirect("/dashboard")->with("status", "Data profil berhasil diupdate.");
+        // if($this->member->first()->id_instansi != NULL)
+        // {
+        //     return redirect("/profil/akun")->with("status", "Data profil akun Berhasil diupdate.");
         
-        }
-        else
-        {
-            return redirect("/profil/akun")->with("status", "Data Berhasil diupdate. Silahkan gabung desa sekarang agar dapat mengikuti program desacenter.id yang telah disediakan. Klik tombol disamping untuk Gabung desa. ")
-                                           ->with("button", "ada");
-        }
+        // }
+        // else
+        // {
+        //     return redirect("/profil/akun")->with("status", "Data Berhasil diupdate. Silahkan gabung desa sekarang agar dapat mengikuti program desacenter.id yang telah disediakan. Klik tombol disamping untuk Gabung desa. ")
+        //                                    ->with("button", "ada");
+        // }
+    }
+
+    public function setOldVerifikasiEmail(Request $request)
+    {
+        $this->input = $request->input();
+
+        $nama = $request->session()->put("old_nama", $this->input['nama']);
+        $email = $request->session()->put("old_email", $this->input['email']);
+
+        $result = array(
+            "status" => true
+        );
+
+        echo json_encode($result);
     }
 
     public function updateprofildesa(Request $request)
@@ -508,10 +511,10 @@ class MemberController extends Controller
         $this->input = $request->input();
         $this->uid   = $request->session()->get("uid");
 
-        $request->validate([
-            "namakepala" => "required",
-            "nowakepala" => "required",
-        ]);
+        // $request->validate([
+        //     "namakepala" => "required",
+        //     "nowakepala" => "required",
+        // ]);
 
         $this->member = DB::table("mst_member as a")
                           ->where("a.uid", $this->uid)
@@ -526,7 +529,7 @@ class MemberController extends Controller
               "no_wa_sekertaris"     => "+62".$this->input['nowasekertaris']
           ]);
 
-        return redirect("/profil/desa")->with("status", "Data informasi desa berhasil diupdate. Silahkan untuk mengikuti program menuju ke menu DASHBOARD");
+        return redirect("/profil/desa")->with("status", "Data informasi desa berhasil diupdate. Silahkan kembali ke menu DASHBOARD untuk mengikuti program yang telah disediakan.");
     }
 
     public function infobumdes(Request $request)
@@ -652,13 +655,18 @@ class MemberController extends Controller
 
         $this->uid = $request->session()->get('uid');
         $this->member = DB::table("mst_member as a")
-                        ->select("a.uid as uid","a.email", "a.nama", "a.telp", "a.foto", "a.id_instansi")
+                        ->select("a.uid as uid","a.email","a.id", "a.nama", "a.telp", "a.foto", "a.id_instansi")
                         ->where("a.uid", $this->uid)
                         ->get();
 
         $this->detail = DB::table("mst_training as a")
                         ->where("a.id", $this->idprogram)
                         ->get();
+
+        $this->checkMember = DB::table("trx_pemesanan as a")
+                            ->where("a.id_training", $this->idprogram)
+                            ->where("a.id_member", $this->member->first()->id)
+                            ->get();
 
         $this->pemesanan = DB::table("trx_pemesanan as a")
                            ->where("a.id_training", $this->idprogram)
@@ -668,7 +676,8 @@ class MemberController extends Controller
             "member"   => $this->member->first(),
             "program"  => $this->program,
             "detail"   => $this->detail->first(),
-            "pemesanan"=> $this->pemesanan
+            "pemesanan"=> $this->pemesanan,
+            "check"    => $this->checkMember
         );
 
         return view("pages.detailprogram")->with($data);
@@ -695,12 +704,17 @@ class MemberController extends Controller
                                 ->where("a.id_training", $this->idprogram)
                                 ->get();
 
+        $this->training = DB::table("mst_training as a")
+                          ->where("a.id", $this->idprogram)
+                          ->get();
+
         if($this->checkPemesanan->count() == 0)
         {
             $data = array(
                 "member"    => $this->member->first(),
                 "program"   => $this->program,
-                "idprogram" => $this->idprogram
+                "idprogram" => $this->idprogram,
+                "training"  => $this->training
             );
 
             return view("pages.syaratketentuan")->with($data);
@@ -769,6 +783,62 @@ class MemberController extends Controller
     }
 
     public function simpanpeserta(Request $request)
+    {
+        if(!$request->session()->get("uid"))
+        {
+            return redirect("/login")->with("status", "Session akun anda habis. Silahkan lakukan login kembali.");
+            exit();
+        }
+
+        $this->input = $request->input();
+
+        $this->program = $this->input['idprogram'];
+
+        $this->uid    = $request->session()->get('uid');
+        $this->member = DB::table("mst_member as a")
+                        ->select("a.uid as uid","a.email","a.id", "a.nama", "a.telp", "a.foto", "a.id_instansi")
+                        ->where("a.uid", $this->uid)
+                        ->get();
+
+        $this->checkPemesanan = DB::table("trx_pemesanan as a")
+                                ->where("a.id_member", $this->member->first()->id)
+                                ->where("a.id_training", $this->program)
+                                ->get();
+        
+        if($this->checkPemesanan->count() == 0)
+        {
+            $this->training = DB::table("mst_training as a")
+                              ->where("a.id", $this->program)
+                              ->get()->first();
+
+            $kodeprogram = $this->training->kode;
+            $scramble    = STR_PAD(rand(10,1000),4,"0",STR_PAD_LEFT);
+
+            $kodepemesanan = $kodeprogram.$scramble;
+
+            $kodeunik = rand(1, 999);
+
+            DB::table("trx_pemesanan")
+            ->insert([
+                "id_member"       => $this->member->first()->id,
+                "id_training"     => $this->program,
+                "kode_pemesanan"  => $kodepemesanan,
+                "kode_unik"       => $kodeunik,
+                "status"          => "aktif",
+                "tanggal"         => date("Y-m-d H:i:s"),
+                "tanggal_expired" => date('Y-m-d H:i:s', strtotime("+1 day"))
+            ]);
+
+            $this->response = array(
+                "status" => true
+            );
+    
+            echo json_encode($this->response);
+
+        }
+    }
+
+    public function simpanpeserta__(Request $request)
     {
         if(!$request->session()->get("uid"))
         {
@@ -968,5 +1038,53 @@ class MemberController extends Controller
         );
 
         return view("pages.homeprogram")->with($data);
+    }
+
+    public function semuaprogram(Request $request)
+    {
+        if(!$request->session()->get("uid"))
+        {
+            return redirect("/login")->with("status", "Session akun anda habis. Silahkan lakukan login kembali.");
+            exit();
+        }
+
+        $this->idprogram = $request->segment(3);
+
+        $this->uid = $request->session()->get('uid');
+        $this->member = DB::table("mst_member as a")
+                        ->select("a.uid as uid","a.email", "a.nama", "a.telp", "a.foto", "a.id_instansi")
+                        ->where("a.uid", $this->uid)
+                        ->get();
+
+        $data = array(
+            "member"   => $this->member->first(),
+            "program"  => $this->program
+        );
+        return view("pages.semuaprogram")->with($data);
+    }
+
+    public function verifikasiFinish(Request $request)
+    {
+        if(!$request->session()->get("uid"))
+        {
+            return redirect("/login")->with("status", "Session akun anda habis. Silahkan lakukan login kembali.");
+            exit();
+        }
+
+        $this->uid = $request->session()->get('uid');
+
+        $this->nama     = $request->get("nama");
+        $this->email    = $request->get("email");
+
+        DB::table("mst_member as a")
+        ->where("a.uid", $this->uid)
+        ->update([
+            "is_verifikasi_email" => 1,
+            "nama" => $this->nama,
+            "email" => $this->email
+        ]);
+
+        return redirect("profil/akun")->with("status", "Email anda telah berhasil di verifikasi. Informasi akan dikirim melalui email dan nomor Whatsapp.");
+                                      
     }
 }

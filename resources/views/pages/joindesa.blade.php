@@ -68,6 +68,14 @@
     .form-group{
         margin-bottom: 0rem !important;
     }
+
+    #tr-odd{
+        background:#f9f9f9;
+    }
+
+    #tr-even{
+        background:#e9e9e9;
+    }
 </style>
 <!--**********************************
     Content body start
@@ -89,7 +97,7 @@
         </div>
 
         
-        @if($member->email != "")
+        @if($member->nama != "")
         <div class="row">
 
             <div class="col-lg-12">
@@ -104,13 +112,13 @@
                                 <div class="col-12">
 
 
-                                    <form class="form-horizontal">
+                                    <div class="form-horizontal">
                                         @csrf
                                         <div class="form-group row align-items-center">
                                             <label class="col-sm-2 col-form-label text-label">Nomor Registrasi Desa / Nama Desa</label>
                                             <div class="col-sm-6">
                                                 <div class="input-group">
-                                                    <input type="text" name="kodedesa"  class="form-control"  placeholder="Isikan Berdesarkan Kode Desa / Nama Desa">
+                                                    <input type="text" name="kodedesa" class="form-control"  placeholder="Isikan Berdesarkan Kode Desa / Nama Desa">
                                                 </div>
                                                 <div class="alert-warning" style="padding:5px; margin:5px 0px; font-size:14px;"> Contoh pengisian kode desa : 11.01.01.2001</div>
                                             </div>
@@ -130,7 +138,7 @@
                                             </div>
                                         </div>
                                         
-                                    </form>
+                                    </div>
                                 </div>
                             </div>
                             
@@ -142,6 +150,16 @@
 
                             <div class="row" id="clone-content">
                                 <div class="table-responsive">
+                                    <div class="float-right" style="color:#000;padding:5px 0px;">
+                                        Filter : 
+                                        <select name="sort" onchange="caridesa(this)" style="padding:5px;">
+                                            <option value="">.:: Urutkan ::.</option>
+                                            <option value="provinsi">Berdasarkan Provinsi</option>
+                                            <option value="kabupaten">Berdasarkan Kabupaten</option>
+                                            <option value="kecamatan">Berdasarkan Kecamatan</option>
+                                            <option value="desa">Berdasarkan Desa</option>
+                                        </select>
+                                    </div>
                                     <table class="table compact">
                                         <thead class="table-header">
                                             <tr>
@@ -214,13 +232,22 @@
 
 
 
-
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script type="text/javascript">
+    $(document).ready(function(){
+        $("input[name='kodedesa']").on('keypress',function(e) {
+            if(e.which == 13) {
+                var element = $("button[type='button']");
+                caridesa(element);
+            }
+        });
+    });
 
-    function caridesa(obj)
+    function filtered(obj)
     {
         var _token    = $("input[name='_token']").val();
         var kodedesa  = $("input[name='kodedesa']").val();
+        var filtered  = $("select[name='sort']").val();
 
         var valid = (kodedesa == "");
 
@@ -236,7 +263,8 @@
             dataType : "JSON",
             data : {
                 _token : _token,
-                kodedesa : kodedesa
+                kodedesa : kodedesa,
+                filtered : filtered
             },
             beforeSend : function(xhr)
             {
@@ -252,9 +280,19 @@
 
                     table.innerHTML = "";
 
+                    var seq = 1;
                     for(i = 0; i < result.data.length; i++)
                     {
                         var row = table.insertRow();
+
+                        if(seq%2 == 0)
+                        {
+                            row.setAttribute("id", "tr-odd");
+                        }
+                        else
+                        {
+                            row.setAttribute("id", "tr-even");
+                        }
 
                         var cell0 = row.insertCell(0);
                         var cell1 = row.insertCell(1);
@@ -272,7 +310,7 @@
                         var namadesa    = result.data[i].nama;
                         var jumlah      = result.data[i].jml;
 
-                        cell0.innerHTML = "-";
+                        cell0.innerHTML = seq;
                         cell1.innerHTML = provinsi;
                         cell2.innerHTML = kabupaten;
                         cell3.innerHTML = kecamatan;
@@ -281,6 +319,97 @@
                         cell6.innerHTML = jumlah+" anggota";
                         cell7.innerHTML = "<button type='button' onclick=pilihdesa(this,'"+kodedesa+"') class='btn btn-xs btn-primary'>Gabung Desa</button>";
 
+                        seq++;
+                    }
+
+                }
+                else
+                {
+                    alert("Data tidak ditemukan.");
+                }
+            },
+            complete : function(xhr)
+            {
+                $(obj).prop("disabled", false);
+            }
+        })
+    }
+
+    function caridesa(obj)
+    {
+        var _token    = $("input[name='_token']").val();
+        var kodedesa  = $("input[name='kodedesa']").val();
+        var filtered  = $("select[name='sort']").val();
+        var valid = (kodedesa == "");
+
+        if(valid)
+        {
+            alert("Silahkan untuk masukan kode desa atau nama desa.");
+            return false;
+        }
+
+        $.ajax({
+            url : "getMaster/desa",
+            type : "POST",
+            dataType : "JSON",
+            data : {
+                _token : _token,
+                kodedesa : kodedesa,
+                filtered  : filtered
+            },
+            beforeSend : function(xhr)
+            {
+                $(obj).prop("disabled", true);
+                $("#table-desa").html("<tr><td style='text-align:center;' colspan='8'>Loading, Mohon tunggu sebentar . . .</td></tr>")
+            },
+            success : function(result, status, xhr)
+            {
+                console.log(result.data);
+                if(result.status)
+                {
+                    var table = document.getElementById("table-desa");
+
+                    table.innerHTML = "";
+
+                    var seq = 1;
+                    for(i = 0; i < result.data.length; i++)
+                    {
+                        var row = table.insertRow();
+                        if(seq%2 == 0)
+                        {
+                            row.setAttribute("id", "tr-odd");
+                        }
+                        else
+                        {
+                            row.setAttribute("id", "tr-even");
+                        }
+
+                        var cell0 = row.insertCell(0);
+                        var cell1 = row.insertCell(1);
+                        var cell2 = row.insertCell(2);
+                        var cell3 = row.insertCell(3);
+                        var cell4 = row.insertCell(4);
+                        var cell5 = row.insertCell(5);
+                        var cell6 = row.insertCell(6);
+                        var cell7 = row.insertCell(7);
+
+                        var provinsi    = result.data[i].provinsi;
+                        var kabupaten   = result.data[i].kabupaten;
+                        var kecamatan   = result.data[i].kecamatan;
+                        var kodedesa    = result.data[i].kode;
+                        var namadesa    = result.data[i].nama;
+                        var jumlah      = result.data[i].jml;
+
+                        cell0.innerHTML = seq;
+                        cell1.innerHTML = provinsi;
+                        cell2.innerHTML = kabupaten;
+                        cell3.innerHTML = kecamatan;
+                        cell4.innerHTML = kodedesa;
+                        cell5.innerHTML = namadesa;
+                        cell6.innerHTML = jumlah+" anggota";
+                        cell7.innerHTML = "<button type='button' onclick=pilihdesa(this,'"+kodedesa+"') class='btn btn-xs btn-primary'>Gabung Desa</button>";
+
+                        seq++;
                     }
 
                 }
@@ -367,39 +496,50 @@
     function pilihdesa(obj, kodedesa)
     {
         //alert('oke');
-        var isconfirm = confirm("Apakah anda yakin memilih desa dengan kode "+kodedesa+" ?");
+        //var isconfirm = confirm("Apakah anda yakin memilih desa dengan kode "+kodedesa+" ?");
+        var provinsi = $(obj).parents("tr").find("td:eq(1)").text();
+        var kabupaten = $(obj).parents("tr").find("td:eq(2)").text();
+        var kecamatan = $(obj).parents("tr").find("td:eq(3)").text();
+        var desa = $(obj).parents("tr").find("td:eq(5)").text();
 
-        if(isconfirm)
-        {
-            var _token = $("input[name='_token']").val();
+        Swal.fire({
+            html: 'Nama Desa : '+desa+' <br> Nama Provinsi : '+provinsi+'<br> Nama Kabupaten : '+kabupaten+'<br> Nama Kecamatan : '+kecamatan ,
+            showCancelButton: true,
+            confirmButtonText: `Save`,
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) 
+            {
+                var _token = $("input[name='_token']").val();
 
-            $.ajax({
-                url : "/postJoinDesa",
-                type : "POST",
-                dataType : "JSON",
-                data : {
-                    _token   : _token,
-                    kodedesa : kodedesa
-                },
-                beforeSend : function(xhr)
-                {
-                    $(obj).prop("disabled", true);
-                },
-                success : function(result, status, xhr)
-                {
-                    if(result.status)
+                $.ajax({
+                    url : "/postJoinDesa",
+                    type : "POST",
+                    dataType : "JSON",
+                    data : {
+                        _token   : _token,
+                        kodedesa : kodedesa
+                    },
+                    beforeSend : function(xhr)
                     {
-                        setTimeout(function(){
-                            window.location.href = "/join-desa";
-                        }, 1000);
+                        $(obj).prop("disabled", true);
+                    },
+                    success : function(result, status, xhr)
+                    {
+                        if(result.status)
+                        {
+                            setTimeout(function(){
+                                window.location.href = "/dashboard";
+                            }, 1000);
+                        }
+                    },
+                    error : function(error, status, xhr)
+                    {
+                        console.log("error : "+error);
                     }
-                },
-                error : function(error, status, xhr)
-                {
-                    console.log("error : "+error);
-                }
-            });
-        }
+                });
+            } 
+        });
     }
 
 </script>

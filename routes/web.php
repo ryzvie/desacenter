@@ -47,6 +47,7 @@ Route::post('/daftarUserByEmail', [AuthController::class, 'daftarUserByEmail']);
 
 Route::post('/postJoinDesa', [MemberController::class, 'postJoinDesa']);
 Route::get('/profil/akun', [MemberController::class, 'profilAkun']);
+Route::get('/profil/verifikasiFinish', [MemberController::class, 'verifikasiFinish']);
 Route::post('/profil/update', [MemberController::class, 'updateProfil']);
 Route::post('/profil/updatebumdes', [MemberController::class, 'updateProfilBumdes']);
 Route::get('/dashboard', [MemberController::class, 'dashboard']);
@@ -59,6 +60,8 @@ Route::post('/program/tambahpeserta', [MemberController::class, 'tambahpeserta']
 Route::post('/program/simpanpeserta/{idprogram}', [MemberController::class, 'simpanpeserta']);
 Route::get('/program/success/{idprogram}', [MemberController::class, 'success']);
 Route::get('/program/form/{idprogram}', [MemberController::class, 'formkesediaan']);
+Route::get('/program/lihatsemua', [MemberController::class, 'semuaprogram']);
+Route::post('/profil/setOldVerifikasiEmail', [MemberController::class, 'setOldVerifikasiEmail']);
 
 //HALAMAN ADMIN
 Route::get('/admin/login', [AdminController::class, 'login']);

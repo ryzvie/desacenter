@@ -40,6 +40,18 @@
         padding:5px 10px !important;
         font-size: 14px !important;
     }
+
+    #syaratketentuan p{
+        text-align:justify;
+    }
+
+    #syaratketentuan ul{
+        margin:5px 18px;
+    }
+
+    #syaratketentuan ul li{
+        padding:5px 0px;
+    }
 </style>
 <!--**********************************
     Content body start
@@ -80,21 +92,12 @@
                                 <div class="box-title">
                                     <h5>{{ $detail->nama }}</h5>
                                 </div>
-                                <div style="color:#555; text-align:justify; margin-bottom:15px;">
+                                <div style="color:#555;  margin-bottom:15px;">
+                                    <div id="syaratketentuan" style="overflow-y:scroll; height:400px;">
                                     @php 
-                                        $string = strip_tags($detail->tentang);
-                                        if (strlen($string) > 500) {
-
-                                            // truncate string
-                                            $stringCut = substr($string, 0, 800);
-                                            $endPoint = strrpos($stringCut, ' ');
-
-                                            //if the string doesn't contain any space then it will cut without word basis.
-                                            $string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                            $string .= ' ... ';
-                                        }
-                                        echo $string;
+                                        echo $detail->syarat_ketentuan;
                                     @endphp
+                                    </div>
                                 </div>
                                 
 
@@ -107,9 +110,16 @@
                                     <div>
                                         <!--<a type="button" href="{{ url('program/ikut/'.$detail->id) }}" class="btn btn-xs btn-default">Ikut Program</a>-->
                                         @csrf
+
+                                        @if($check->count() == 0)
                                         <a type="button" style="padding:10px !important;" href="{{ url('program/syaratketentuan/'.$detail->id) }}" class="btn btn-xs btn-primary">Ikut Program</a>
                                     
                                         <div style="margin-top:10px;" id="notif-callback"></div>
+                                        @else
+                                        <div class="alert alert-success" style="font-size:14px; line-height:20px;">
+                                            Anda sudah terdaftar di program ini. Silahkan menuju dashboard untuk melihat program lainnya.
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                                 @else

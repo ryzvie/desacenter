@@ -17,19 +17,35 @@ $(document).ready(function(){
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    window.recaptchaVerifier  = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-        'size': 'invisible',
-        'callback': function (response) {
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            console.log("recaptcha resolved");
-            onSignInSubmit();
-        }
+    firebase.auth().languageCode = 'id';
+    
+    window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    'size': 'normal',
+    'callback': (response) => {
+        $("#btn-verifikasi").prop("disabled",false);
+    },
+    'expired-callback': () => {
+        // Response expired. Ask user to solve reCAPTCHA again.
+        // ...
+        grecaptcha.reset(window.recaptchaWidgetId);
+
+    }
     });
 
-        
     recaptchaVerifier.render().then((widgetId) => {
         window.recaptchaWidgetId = widgetId;
     });
+    // window.recaptchaVerifier  = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+    //     'size': 'invisible',
+    //     'callback': function (response) {
+    //         // reCAPTCHA solved, allow signInWithPhoneNumber.
+    //         console.log("recaptcha resolved");
+    //         onSignInSubmit();
+    //     }
+    // });
+
+        
+    
 
     $("#google").on("click", function(){
         
@@ -76,9 +92,9 @@ $(document).ready(function(){
 
 
 
-function onSignInSubmit(){
+function onSignInSubmit(obj){
 
-    $("#btn-masuk").on('click', function(){
+    $(obj).prop("disabled", true);
         var otp = $("#otp").val();
 
         console.log(otp);
@@ -101,7 +117,7 @@ function onSignInSubmit(){
                 beforeSend : function(xhr)
                 {
                     
-                    $("#btn-masuk").prop("disabled", true);
+                    $(obj).prop("disabled", true);
                 },
                 success : function(result, status, xhr)
                 {
@@ -124,21 +140,7 @@ function onSignInSubmit(){
                     console.log("error : "+error);
                 }
             });
-            // Swal.fire({
-            //     icon: 'success',
-            //     title: 'Berhasil!',
-            //     text: 'Selamat datang di Desacenter.id'
-            // }).then (function() {
-            //     window.location.href = "/";
-            // });
-
-            // if(user != null){
-            //     var phone = user.phoneNumber;
-            //     var vUid = user.uid;
-            //     var vOtp = code;
-            //     var token = $("meta[name='csrf-token']").attr("content");
-
-            // }
+            
 
         }).catch(function(error){
             Swal.fire({
@@ -148,9 +150,10 @@ function onSignInSubmit(){
             });
         });
 
+}
 
-    });
-
+function register()
+{
 
         
     $("#btn-daftar").on('click', function(){
@@ -209,50 +212,6 @@ function onSignInSubmit(){
 
             });
 
-            // $.ajax({
-            //     url: '/u-register',
-            //     type: "POST",
-            //     headers: {
-            //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //     },
-            //     dataType: "JSON",
-            //     cache: false,
-            //     data:{
-            //         "uid": vUid,
-            //         "phone": phone
-            //     },
-            //     success:function(response){
-            //         if(response.success){
-            //             Swal.fire({
-            //                 icon: 'success',
-            //                 title: "Selamat datang di Desacenter.id",
-            //                 text: ' Anda akan di arahkan dalam 3 Detik',
-            //                 timer: 3000,
-            //                 showCancelButton: false,
-            //                 showConfirmButton: false
-            //             }).then (function() {
-            //                 window.location.href = "/";
-            //             });
-            //         }else{
-            //             Swal.fire({
-            //                 icon: 'error',
-            //                 title: 'Login Gagal',
-            //                 text: 'Silahkan coba beberapa saat lagi.'
-            //             });
-            //         }
-            //         console.log(response);
-            //     },
-
-            //     error:function(response){
-            //         console.log(response);
-            //         Swal.fire({
-            //             icon: 'error',
-            //             title: 'Ups',
-            //             html: '<b>Error</b> karena ' + response
-            //         });
-            //     }
-
-            // });
             
         }).catch(function(error){
             Swal.fire({
@@ -274,9 +233,9 @@ $("#btn-verifikasi").on('click', function(){
 
     var phone = $("#phone").val();
     var pcode = "+62" + phone;
-    console.log(pcode);
     timer(60);
     var verifier = window.recaptchaVerifier;
+
     firebase.auth().signInWithPhoneNumber(pcode, verifier)
     .then(function(result){
         window.confirmationResult = result;
@@ -295,15 +254,19 @@ $("#btn-verifikasi").on('click', function(){
         $("#btn-masuk").show();
         $("#btn-verifikasi").hide();
         $("#form-phone").hide();
+        $("#recaptcha-container").hide();
         $("#form-otp").show();
 
         
 
     }).catch(function(error){
+
+        grecaptcha.reset(window.recaptchaWidgetId);
+
         Swal.fire({
             icon: 'error',
             title: 'Gagal Terkirim',
-            text: 'Kode OTP Gagal dikirimkan ke ' + pcode + '. Karena koneksi anda tidak stabil.'
+            text: error.message
         });
 
         $("#btn-daftar").hide();

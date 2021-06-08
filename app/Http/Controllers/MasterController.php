@@ -77,6 +77,7 @@ class MasterController extends Controller
         $strWhere = [];
 
         $kodedesa = $this->input['kodedesa'];
+        $filtered = isset($this->input['filtered']) ? $this->input['filtered'] : "";
 
         $this->result = DB::table('mst_desa as a')
                            ->select('a.kode_desa as kode',
@@ -97,6 +98,19 @@ class MasterController extends Controller
                             })
                             ->when($this->input['kodedesa'] != "", function($query, $kodedesa){
                                 return $query->orWhere('a.nama_desa', 'LIKE', '%'.$this->input['kodedesa'].'%');
+                            })
+                            ->when($filtered == "provinsi", function($query, $filtered){
+                                return $query->orderBy('d.nama_propinsi', 'asc');
+                                
+                            })
+                            ->when($filtered == "kabupaten", function($query, $filtered){
+                                return $query->orderBy('c.nama_kabupaten', 'asc');
+                            })
+                            ->when($filtered == "kecamatan", function($query, $filtered){
+                                return $query->orderBy('b.nama_kecamatan', 'asc');
+                            })
+                            ->when($filtered == "desa", function($query, $filtered){
+                                return $query->orderBy('a.nama_desa', 'asc');
                             })
                            ->get();
 

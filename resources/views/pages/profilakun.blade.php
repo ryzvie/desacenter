@@ -1,7 +1,11 @@
 @extends('layouts.main')
 
 @section('content')
-
+<style>
+    .note{
+        color:red;
+    }
+</style>
 <!--**********************************
     Content body start
 ***********************************-->
@@ -74,13 +78,13 @@
                                                 <img id="img" style="cursor:pointer;height:120px; width:125px;border:1px solid #ccc;" onclick="uploadfoto(this)" class="rounded-circle" alt="200x200" src="{{ (asset('upload/profil/'.$response->foto)) }}" data-holder-rendered="true">
                                             @endif     
                                                 
-                                                <div style="color:#000; padding:10px 0px;">*Upload foto Profil (Jika ada)</div>
+                                                <div style="color:#000; padding:10px 0px;">*Upload foto Profil (Jika ada) <br> Max Size : 2MB <br> Format : jpg, jpeg, png</div>
                                             </div>
                                         </div>
 
                                         <input type="file" name="file" style="display:none;" />
 
-                                        <div class="form-group row align-items-center">
+                                        <div class="sr-only form-group row align-items-center">
                                             <label class="col-sm-3 col-form-label text-label">Uid [Otomatis dari sistem]</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
@@ -90,7 +94,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row align-items-center">
-                                            <label class="col-sm-3 col-form-label text-label">Nama Akun</label>
+                                            <label class="col-sm-3 col-form-label text-label">Nama *</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" id="nama" value="{{ $response->nama }}"
@@ -104,10 +108,32 @@
                                         <div class="form-group row align-items-center">
                                             <label class="col-sm-3 col-form-label text-label">Email</label>
                                             <div class="col-sm-9">
+                                                
                                                 <div class="input-group">
-                                                    <input type="text" value="{{ $response->email }}" class="form-control @error('email') is-invalid @enderror" name="email" id="Email"
+                                                    @php
+                                                        if($response->email != "")
+                                                        {
+                                                            if(!$response->is_verifikasi_email)
+                                                            {
+                                                                $background = "#FF5722";
+                                                                $color      = "#fff";
+                                                            }
+                                                            else
+                                                            {
+                                                                $background = "#00b000";
+                                                                $color      = "#fff";
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            $background = "";
+                                                            
+                                                            $color      = "#000";
+                                                        }
+                                                    @endphp
+                                                    <input type="text"  value="{{ $response->email }}" class="form-control @php echo $background @endphp  @error('email') is-invalid @enderror" name="email" id="Email"
                                                         placeholder="Email"
-                                                        aria-describedby="validationDefaultUsername2">
+                                                        aria-describedby="email">
                                                 </div>
                                                 @error('email')
                                                     <div style="font-size:14px; padding:5px; margin-top:5px;" class="alert alert-danger">{{ $message }}</div>
@@ -125,7 +151,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row align-items-center">
+                                        <div class="sr-only form-group row align-items-center">
                                             <label class="col-sm-3 col-form-label text-label">Alamat</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group">
@@ -134,7 +160,10 @@
                                             </div>
                                         </div>
 
-                                        
+                                        <div class="note">
+                                            <div>Catatan :</div>
+                                            <div>Label yang bertanda (*) harus diisi.</div>
+                                        </div>
 
                                         <div class="form-group text-right">
                                             <button type="" class="btn btn-md btn-primary mt-5">Simpan</button>
@@ -184,7 +213,26 @@
 ***********************************-->
 
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-analytics.js"></script>
 <script type="text/javascript">
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    var firebaseConfig = {
+        apiKey: "AIzaSyAnFw2cck0mhVurHRkS9YFoBac-A80-bco",
+        authDomain: "desacenter-41018.firebaseapp.com",
+        projectId: "desacenter-41018",
+        storageBucket: "desacenter-41018.appspot.com",
+        messagingSenderId: "816125856145",
+        appId: "1:816125856145:web:063b22b74507452050b230",
+        measurementId: "G-BWL2M9WNXQ"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
     $(document).ready(function(){
 
@@ -212,6 +260,67 @@
         $("input[name='file'][type='file']").click();
     }
 
+    function verifikasiemail(obj)
+    {
+        
+        var email   = $("input[name='email']").val();
+        var nama    = $("input[name='nama']").val();
+
+        var actionCodeSettings = {
+            // URL you want to redirect back to. The domain (www.example.com) for this
+            // URL must be in the authorized domains list in the Firebase Console.
+            url: '{{ url("profil/verifikasiFinish") }}?nama='+nama+'&email='+email,
+            // This must be true.
+            handleCodeInApp: true
+        };
+        
+        $(obj).parent().parent().find("input").prop("readonly", true);
+
+        firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
+        .then(() => {
+            // The link was successfully sent. Inform the user.
+            // Save the email locally so you don't need to ask the user for it again
+            // // if they open the link on the same device.
+            // $.ajax({
+            //     url : "{{ url('profil/setOldVerifikasiEmail') }}",
+            //     type : "POST",
+            //     dataType : "JSON",
+            //     data : {
+            //         email : email,
+            //         nama : nama
+            //     },
+            //     beforeSend : function(xhr)
+            //     {
+            //         $(obj).html("Loading. . .");
+            //     },
+            //     success : function(result, status)
+            //     {
+            //         console.log("Session set complete");
+
+                    
+            //     },
+            //     error : function(error, status, error)
+            //     {
+            //         console.log(error);
+            //     },
+            //     complete : function(xhr)
+            //     {
+            //         $(obj).html("Verifikasi Email");
+            //     }
+            // });
+
+            window.localStorage.setItem('emailForSignIn', email);
+            $(obj).parent().parent().parent().append("<div class='alert-success' style='margin-top:10px; padding:5px 10px;'>Verifikasi email telah dikirim ke email anda. Silahkan cek email anda dan lakukan verifikasi.</div>");
+            // ...
+        })
+        .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert("error");
+            console.log(errorMessage);
+            // ...
+        });
+    }
 
 
 </script>
