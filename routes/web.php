@@ -68,12 +68,21 @@ Route::get('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/authentication', [AdminController::class, 'authentication']);
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
 
+//laporan
 Route::get('/admin/laporan/desa-terdaftar',[AdminController::class, 'lapdesaterdaftar']);
 Route::get('/admin/laporan/desa-ikut-program',[AdminController::class, 'lapdesaikutprogram']);
-
 Route::get('/admin/laporan/member-daftar',[AdminController::class, 'lapmemberdaftar']);
 Route::get('/admin/laporan/member-program',[AdminController::class, 'lapmemberprogram']);
 Route::get('/admin/laporan/member-desa',[AdminController::class, 'lapmemberdesa']);
+
+// laporan all
+Route::get('/admin/laporan/desa-terdaftar-all',[AdminController::class, 'lapdesaterdaftar_all']);
+Route::get('/admin/laporan/desa-ikut-program-all',[AdminController::class, 'lapdesaikutprogram_all']);
+Route::get('/admin/laporan/member-daftar-all',[AdminController::class, 'lapmemberdaftar_all']);
+Route::get('/admin/laporan/member-program-all',[AdminController::class, 'lapmemberprogram_all']);
+Route::get('/admin/laporan/member-desa-all',[AdminController::class, 'lapmemberdesa_all']);
+
+
 
 //GET MASTER DATA
 Route::post('/getMaster/kabupaten', [MasterController::class, 'kabupaten']);

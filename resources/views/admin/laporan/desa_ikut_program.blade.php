@@ -27,12 +27,12 @@
 
 
                                 <div class="form-group row align-items-center">
-                                    <label class="col-sm-3 col-form-label text-label">Nama Peserta</label>
+                                    <label class="col-sm-3 col-form-label text-label">Nama Instansi</label>
                                     <div class="col-sm-9">
                                         <div class="input-group">
                                             <input type="text" class="form-control"
                                                 value="{{ $inputCallback['namainstansi'] }}" name="namainstansi"
-                                                id="namainstansi" placeholder="Nama Peserta"
+                                                id="namainstansi" placeholder="Nama Instansi"
                                                 aria-describedby="namainstansi">
                                         </div>
                                     </div>
@@ -58,6 +58,29 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
+                        <div class="">
+                            <form method="get" target="_blank" style="display: inline;"
+                                action="{{ url('admin/laporan/desa-ikut-program-all') }}">
+                                <input hidden type="text" class="form-control"
+                                    value="{{ $inputCallback['namainstansi'] }}" name="namainstansi" id="namainstansi"
+                                    aria-describedby="namainstansi">
+                                <input hidden type="text" class="form-control" value="1" name="btn" id="btn"
+                                    aria-describedby="btn">
+                                <button class="btn btn-outline-primary" style="margin-bottom: 10px;" type="submit">Print
+                                    PDF</button>
+                            </form>
+                            <form method="get" target="_blank" style="display: inline;"
+                                action="{{ url('admin/laporan/desa-ikut-program-all') }}">
+                                <input hidden type="text" class="form-control"
+                                    value="{{ $inputCallback['namainstansi'] }}" name="namainstansi" id="namainstansi"
+                                    aria-describedby="namainstansi">
+                                <input hidden type="text" class="form-control" value="2" name="btn" id="btn"
+                                    aria-describedby="btn">
+                                <button class="btn btn-outline-success" style="margin-bottom: 10px;" type="submit">Print
+                                    Excel</button>
+                            </form>
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead style="background-color: #283593; color: #fff; padding: 5px">
