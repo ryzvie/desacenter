@@ -82,6 +82,12 @@ class AuthController extends Controller
                 "message" => "Login berhasil. Mohon tunggu untuk masuk ke halaman member"
             );
 
+            DB::table("mst_member as a")
+            ->where("a.telp", "+62".$this->input['telp'])
+            ->update([
+                "uid" => $this->input['uid']
+            ]);
+
             $request->session()->put("uid", $this->input['uid']);
             $request->session()->put("telp", $this->input['telp']);
 
@@ -133,6 +139,66 @@ class AuthController extends Controller
             return $pin;
         }
     }
+
+    public function daftarakun(Request $request)
+    {
+        
+        $this->input = $request->input();
+
+        $request->validate([
+            "nama"  => "required",
+            "email" => "required",
+            "telp"  => "required"
+        ]);
+
+        $this->checkUserEmailAndTelp = DB::table("mst_member as a")
+                                       ->orWhere("a.email", $this->input['email'])
+                                       ->orWhere("a.telp", "+62".$this->input['telp'])
+                                       ->get();
+        
+        //CHECK USER EMAIL DAN TELP
+        if($this->checkUserEmailAndTelp->count() > 0)
+        {
+            $old = array(
+                "old_nama" => $this->input['nama'],
+                "old_email" => $this->input['email'],
+                "old_telp" => $this->input['telp'],
+            );
+
+            return redirect("/register")->with("status", "Email atau Nomor Telp sudah pernah terdaftar.")
+                                        ->with($old);
+            exit();
+        }
+
+
+        //INPUT MST MEMBER 
+        $this->getuniqpin = $this->getpin();
+
+        DB::table("mst_member")
+        ->insert([
+            "telp"       => "+62".$this->input['telp'],
+            "nama"       => $this->input['nama'],
+            "email"      => $this->input['email'],
+            "pin"        => $this->getuniqpin,
+            "status"     => "aktif",
+            "date_entry" => date("Y-m-d H:i:s")
+        ]);
+        
+        $LastID = DB::getPdo()->lastInsertId();
+
+        DB::table("mst_member as a")
+        ->where("id", $LastID)
+        ->update([
+            "uid" => $LastID
+        ]);
+
+        $request->session()->put("uid",  $LastID);
+        $request->session()->put("telp", $this->input['telp']);
+
+        return redirect("/dashboard");
+    }
+
+    
 
     public function authLogin__(Request $request)
     {

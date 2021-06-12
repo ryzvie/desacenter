@@ -74,10 +74,16 @@ class MasterController extends Controller
     {
         $this->input = $request->input();
 
+        //dd($this->input);
+
         $strWhere = [];
 
         $kodedesa = $this->input['kodedesa'];
-        $filtered = isset($this->input['filtered']) ? $this->input['filtered'] : "";
+        //$filtered = isset($this->input['filtered']) ? $this->input['filtered'] : "";
+
+        $provinsi = $this->input['provinsi'];
+        $kabupaten = $this->input['kabupaten'];
+        $kecamatan = $this->input['kecamatan'];
 
         $this->result = DB::table('mst_desa as a')
                            ->select('a.kode_desa as kode',
@@ -93,24 +99,21 @@ class MasterController extends Controller
                            ->join('mst_kecamatan as b', 'b.kode_kecamatan', '=', 'a.kode_kecamatan')
                            ->join('mst_kabupaten as c', 'c.kode_kabupaten', '=', 'b.kode_kabupaten')
                            ->join('mst_provinsi as d', 'd.kode_propinsi', '=', 'c.kode_propinsi')
-                           ->when($this->input['kodedesa'] != "", function($query, $kodedesa){
+                           ->when($this->input['kodedesa'], function($query, $kodedesa){
                                 return $query->orWhere('a.kode_desa', 'LIKE', $this->input['kodedesa'].'%');
                             })
-                            ->when($this->input['kodedesa'] != "", function($query, $kodedesa){
+                            ->when($this->input['kodedesa'], function($query, $kodedesa){
                                 return $query->orWhere('a.nama_desa', 'LIKE', '%'.$this->input['kodedesa'].'%');
                             })
-                            ->when($filtered == "provinsi", function($query, $filtered){
-                                return $query->orderBy('d.nama_propinsi', 'asc');
+                            ->when($this->input['provinsi'], function($query, $filtered){
+                                return $query->where('d.kode_propinsi', $this->input['provinsi']);
                                 
                             })
-                            ->when($filtered == "kabupaten", function($query, $filtered){
-                                return $query->orderBy('c.nama_kabupaten', 'asc');
+                            ->when($this->input['kabupaten'], function($query, $filtered){
+                                return $query->where('c.kode_kabupaten', $this->input['kabupaten']);
                             })
-                            ->when($filtered == "kecamatan", function($query, $filtered){
-                                return $query->orderBy('b.nama_kecamatan', 'asc');
-                            })
-                            ->when($filtered == "desa", function($query, $filtered){
-                                return $query->orderBy('a.nama_desa', 'asc');
+                            ->when($this->input['kecamatan'], function($query, $filtered){
+                                return $query->where('b.kode_kecamatan', $this->input['kecamatan']);
                             })
                            ->get();
 

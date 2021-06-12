@@ -153,11 +153,16 @@
                                                 
                                             </div>
                                         </div>
-                                        <div class="text-center">
+                                        <!-- <div class="text-center">
                                             <a type="button" class="btn btn-xs btn-info" href="{{ url('program/detail/'.$programs->id) }}">Detail Program</a>
-                                        </div>
+                                        </div> -->
                                         <div class="text-center">
-                                            <a type="button" class="btn btn-xs btn-primary" href="{{ url('program/syaratketentuan/'.$programs->id) }}">Ikuti Program</a>
+                                            @csrf
+                                            <a type="button" style="color:#fff;" class="btn btn-xs btn-primary" onclick="ikutprogram(this, '{{ $programs->id }}' )">Ikuti Program</a>
+                                            <br>
+                                            <div style="margin:10px 0px;">
+                                                <a type="button" style="font-size:12px;" href="{{ url('program/detail/'.$programs->id) }}"> >>Detail Program</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -179,5 +184,37 @@
 ***********************************-->
 
 
+<script type="text/javascript">
 
+    function ikutprogram(obj, idprogram)
+    {
+        var idprogram = idprogram;
+        $.ajax({
+            url      : "{{ url('program/simpanpeserta') }}/"+idprogram,
+            type     : "POST",
+            dataType : "JSON",
+            data : {
+                _token : $("input[name='_token']").val(),
+                idprogram : idprogram
+            },
+            beforeSend : function(xhr)
+            {
+                $(obj).prop("disabled", true);
+            },
+            success : function(result, status, xhr)
+            {
+                console.log(result);
+                if(result.status)
+                {
+                    window.location.href = "{{ url('program/success') }}/"+idprogram;
+                }
+                else
+                {
+                    window.location.href = "{{ url('dashboard') }}";
+                }
+            }
+        })
+    }
+
+</script>
 @endsection

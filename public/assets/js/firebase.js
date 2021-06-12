@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
 
     $("#btn-daftar").hide();
@@ -34,7 +35,10 @@ $(document).ready(function(){
 
     recaptchaVerifier.render().then((widgetId) => {
         window.recaptchaWidgetId = widgetId;
+
     });
+
+    
     // window.recaptchaVerifier  = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
     //     'size': 'invisible',
     //     'callback': function (response) {
@@ -226,6 +230,7 @@ function register()
     
 }
 
+
 $("#btn-verifikasi").on('click', function(){
 
     var code = $("#otp").val();
@@ -248,7 +253,7 @@ $("#btn-verifikasi").on('click', function(){
             text: 'Kode OTP telah dikirimkan ke ' + pcode
         });
 
-
+        timerOn = false;
         //alert("oke");
         $("#btn-daftar").show();
         $("#btn-masuk").show();
@@ -257,6 +262,8 @@ $("#btn-verifikasi").on('click', function(){
         $("#recaptcha-container").hide();
         $("#form-otp").show();
 
+
+        
         
 
     }).catch(function(error){
@@ -300,12 +307,13 @@ $("#btn-verifikasi").on('click', function(){
 
         if(!timerOn) {
             // Do validate stuff here
+            $("#btn-verifikasi").prop("disabled", false);
             return;
         }
 
         // Do timeout stuff here
         $("#btn-verifikasi").attr('disabled', false);
-        $("#btn-verifikasi").val("Kirim Ulang");
+        $("#btn-verifikasi").text("Kirim Ulang");
     }
 
     function signOut(){

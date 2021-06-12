@@ -299,6 +299,9 @@ class MemberController extends Controller
                         ->where("a.uid", $this->uid)
                         ->get();
 
+        $this->provinsi = DB::table("mst_provinsi as a")
+                          ->get();
+
         $this->isSudahPilihDesa = DB::table("mst_member as a")
                                     ->select("a.id_instansi")
                                     ->where("uid", $this->uid)
@@ -307,7 +310,8 @@ class MemberController extends Controller
         $data = array(
             "isSudahPilih" => $this->isSudahPilihDesa->first(),
             "member" => $this->member->first(),
-            "program" => $this->program
+            "program" => $this->program,
+            "provinsi" => $this->provinsi
         );
 
         return view('pages.joindesa')->with($data);
@@ -421,6 +425,7 @@ class MemberController extends Controller
                           ->get();
 
         $this->member = DB::table("mst_member as a")
+                        ->select("a.uid as uid","a.email", "a.nama", "a.telp", "a.foto")
                         ->where("a.uid", $this->uid)
                         ->get();
 
@@ -455,7 +460,7 @@ class MemberController extends Controller
         if($request->file('file'))
         {
             $request->validate([
-                'file' => 'required|mimes:png,jpg,jpeg,csv,txt,xlx,xls,pdf'
+                'file' => 'required|mimes:png,jpg,jpeg,csv,txt,xlx,xls,pdf|max:2048'
             ]);
 
             $name = $this->uid.'_'.$request->file->getClientOriginalName();
@@ -490,20 +495,6 @@ class MemberController extends Controller
         //     return redirect("/profil/akun")->with("status", "Data Berhasil diupdate. Silahkan gabung desa sekarang agar dapat mengikuti program desacenter.id yang telah disediakan. Klik tombol disamping untuk Gabung desa. ")
         //                                    ->with("button", "ada");
         // }
-    }
-
-    public function setOldVerifikasiEmail(Request $request)
-    {
-        $this->input = $request->input();
-
-        $nama = $request->session()->put("old_nama", $this->input['nama']);
-        $email = $request->session()->put("old_email", $this->input['email']);
-
-        $result = array(
-            "status" => true
-        );
-
-        echo json_encode($result);
     }
 
     public function updateprofildesa(Request $request)
@@ -832,10 +823,18 @@ class MemberController extends Controller
             $this->response = array(
                 "status" => true
             );
-    
-            echo json_encode($this->response);
 
         }
+        else
+        {
+            $this->response = array(
+                "status" => false
+            );
+        }
+
+
+        
+        echo json_encode($this->response);
     }
 
     public function simpanpeserta__(Request $request)
@@ -1003,11 +1002,11 @@ class MemberController extends Controller
                   "tanggal_expired" => date('Y-m-d', strtotime("+1 day"))
               ]);
 
-            return redirect("/program/home/".$this->program)->with("status","Terima kasih anda telah mengikuti program kami. Silahkan pilih webinar atau mengisi assesment");
+            return redirect("/program/success/".$this->program)->with("status","Terima kasih anda telah mengikuti program kami. Silahkan pilih webinar atau mengisi assesment");
         }
         else
         {
-            return redirect("/program/home/".$this->program)->with("status","anda sudah terdaftar di program ini. Silahkan untuk pilih webinar atau mengisi assestment.");
+            return redirect("dashboard/")->with("status","anda sudah terdaftar di program ini. Silahkan untuk pilih webinar atau mengisi assestment.");
         }
     }
 
@@ -1067,7 +1066,7 @@ class MemberController extends Controller
     {
         if(!$request->session()->get("uid"))
         {
-            return redirect("/login")->with("status", "Session akun anda habis. Silahkan lakukan login kembali.");
+            return redirect("/login")->with("status", "Session akun anda habis. Silahkan klik link pada email yang dikirim sebelumnya.");
             exit();
         }
 
@@ -1083,6 +1082,7 @@ class MemberController extends Controller
             "nama" => $this->nama,
             "email" => $this->email
         ]);
+
 
         return redirect("profil/akun")->with("status", "Email anda telah berhasil di verifikasi. Informasi akan dikirim melalui email dan nomor Whatsapp.");
                                       

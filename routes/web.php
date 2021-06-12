@@ -43,6 +43,8 @@ Route::post('/daftarUser', [AuthController::class, 'daftarUser']);
 Route::post('/authLogin', [AuthController::class, 'authLogin']);
 Route::get('/authRegisterWithEmail', [AuthController::class, 'authRegisterWithEmail']);
 Route::post('/daftarUserByEmail', [AuthController::class, 'daftarUserByEmail']);
+Route::post('akun/daftarakun', [AuthController::class, 'daftarakun']);
+Route::post('akun/loginpin', [AuthController::class, 'loginpin']);
 
 
 Route::post('/postJoinDesa', [MemberController::class, 'postJoinDesa']);

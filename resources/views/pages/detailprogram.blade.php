@@ -94,9 +94,42 @@
                                 </div>
                                 <div style="color:#555;  margin-bottom:15px;">
                                     <div id="syaratketentuan" style="overflow-y:scroll; height:400px;">
-                                    @php 
-                                        echo $detail->syarat_ketentuan;
-                                    @endphp
+                                        <h5>Program Desa Brilian 2021 Batch 2 dibuka Lagi !</h5>
+
+                                        <div>Batas akhir 31 Mei 2021</div>
+                                        <br>
+
+                                        <p style="text-indent:20px;">
+                                            Setelah sukses Penyelenggaran Inkubasi Desa Brilian 2020 diikuti 125 Desa dan Desa Brilian 2021 Batch 1 diikuti 287 Desa, BRI dan Bumdes.id kembali menyelenggarakan Program Desa Brilian 2021 Batch 2 dengan Target sasaran 500 Desa. 
+
+                                            Kami mengundang bapak/ibu untuk mengusulkan desa yang menurut bapak/ibu layak jadi Desa Brilian. 
+
+                                            Kriteria seleksi Desa Brilian 2021 Batch 2 adalah : belum pernah ikut Program Inkubasi Desa Brilian batch sebelumnya, desa-desa yang memiliki pertumbuhan ekonomi merata dengan peran aktif Bumdes, memiliki terobosan atau inovasi di masa pandemi, menjalankan transformasi digital dan menerapkan pembangunan berkelanjutan. 
+                                        </p>
+
+                                        <p>
+                                            <div>Desa-Desa yang Lolos Seleksi akan mengikuti Program Inkubasi Desa Brilian berupa :</div>
+                                            <br>
+                                            <div>1. Serial Webinar dengan pembicara kompeten </div>
+                                            <div>2. Penilaian Lomba Desa Online </div>
+                                            <div>3. Penganugerahan Pemenang untuk 10 Besar dan 30 Besar, masing-masing akan mendapatkan Dana Pembinaan</div>
+                                            <div>4. Tergabung dalam jejaring digital ribuan Desa Brilian di Seluruh Indonesia.</div>
+                                            <div>5. Peluang untuk Bermitra dengan BUMN dan Industri. </div>
+                                        </p>
+                                        <p>
+                                            Apabila bapak-ibu tertarik silahkan segera melengkapi usulan dengan klik link berikut: 
+                                        </p>
+
+                                        <div>https://pendaftaran-desabrilian.desacenter.id</div>
+                                        <br>
+                                        <div>Kami tunggu sampai 31 Mei 2021</div>
+                                        <br>
+                                        <div>Segera daftar, dan mohon disebarkan ke pihak-pihak yang terkait.</div> 
+                                        <br>
+                                        <div>Tetap Semangat, Terus Bergerak</div>
+                                        <br>
+                                        <div>Sekretariat Inkubasi Desa Brilian 2021 </div>
+                                        <div>Founder Bumdes ID</div>
                                     </div>
                                 </div>
                                 

@@ -166,7 +166,11 @@
                                                             @endif
                                                         </div>
                                                         <div class="text-step">
+                                                            @if($step >= 1)
                                                             <a href="{{ url('profil/akun') }}">Profil Pengguna</a>
+                                                            @else
+                                                            <a href="javascript:void(0)">Profil Pengguna</a>
+                                                            @endif
                                                         </div> 
                                                         <div style="clear:both;"></div>
                                                     </div>
@@ -181,7 +185,11 @@
                                                             @endif
                                                         </div>
                                                         <div class="text-step">
+                                                            @if($step >= 2)
                                                             <a href="{{ url('join-desa') }}">Gabung Desa</a>
+                                                            @else
+                                                            <a href="javascript:void(0)">Gabung Desa</a>
+                                                            @endif
                                                         </div>
                                                         <div style="clear:both;"></div>
                                                         
@@ -197,7 +205,12 @@
                                                             @endif
                                                         </div>
                                                         <div class="text-step">
+                                                            @if($step >= 3)
                                                             <a href="{{ url('program/lihatsemua') }}">Ikut Program</a>
+                                                        
+                                                            @else
+                                                            <a href="javascript:void(0)">Ikut Program</a>
+                                                            @endif
                                                         </div> 
                                                         <div style="clear:both;"></div>
                                                     </div>

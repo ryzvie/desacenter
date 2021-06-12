@@ -105,7 +105,7 @@
                                                 @enderror
                                             </div>
                                         </div>
-                                        <div class="form-group row align-items-center">
+                                        <div class="sr-only form-group row align-items-center">
                                             <label class="col-sm-3 col-form-label text-label">Email</label>
                                             <div class="col-sm-9">
                                                 

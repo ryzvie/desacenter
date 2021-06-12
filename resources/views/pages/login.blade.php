@@ -1,6 +1,15 @@
 @extends('layouts.auth')
 
 @section('content')
+    <style>
+        .btn-default{
+            background:#f9f9f9;
+            border:1px solid #ccc;
+            border-radius:3px;
+            color:#555 !important;
+            font-size:13px;
+        }
+    </style>
 
     <div class="login-bg2 h-100">
         <div class="container-fluid h-100">
@@ -39,7 +48,7 @@
                                 @endif
 
                                 <div id="notifikasi"></div>
-                                <form class="mt-5 mb-5">
+                                <form class="mt-5 mb-4">
 
                                     @csrf
                                     <div class="alert alert-warning" style="font-size:12px;">
@@ -50,7 +59,7 @@
                                         <div>
                                             <div class="input-group">
                                                 <div class="input-group-append bg-custom b-0"><span class="input-group-text">+62</span></div>
-                                                <input type="tel" class="form-control" placeholder="81234567890"  onblur="$(this).val(Number($(this).val()))" name="phone" id="phone">
+                                                <input type="tel" class="form-control" placeholder="Masukan Nomor Telp"  onblur="$(this).val(Number($(this).val()))" name="phone" id="phone">
                                             </div><!-- input-group -->
                                         </div>
                                     </div>
@@ -69,7 +78,21 @@
                                     </div>
 
                                 </form>
+
                                 <div class="text-center">
+                                    <h5 class="mb-4" style="font-size:13px;">Atau masuk dengan akun desacenter.id</h5>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item m-t-10">
+                                            <a type="button" href="akun/loginpin" class="btn btn-default btn-xs">
+                                                <span class="mdi mdi-account-circle"></span> Akun desacenter.id
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <p class="mt-4">Belum punya akun? <a href="{{url('/register')}}">Daftar Sekarang</a>
+                                    </p>
+                                </div>
+
+                                <div class="text-center sr-only">
                                     <h5 class="mb-5">Atau masuk dengan</h5>
                                     <ul class="list-inline">
                                         <li class="list-inline-item m-t-10"><a type="button" onclick="return alert('Maaf fitur ini masih dalam pengembangan.') " class="btn btn-google-plus"><i class="fa fa-google-plus"></i> Google</a>
