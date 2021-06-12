@@ -476,7 +476,7 @@ class AdminController extends Controller
             "member"    => $this->getAdminData->first(),
             "peserta"   => $this->peserta,
             "program"   => $this->program,
-            "btn"   => $this->$btn,
+            "btn"   => $btn,
             "inputCallback" => array(
                 "nama"      => $namapeserta,
                 "program"   => $program

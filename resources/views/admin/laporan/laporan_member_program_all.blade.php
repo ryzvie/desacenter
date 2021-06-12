@@ -13,101 +13,17 @@ header("Content-Disposition: attachment; filename=Data Desa Ikut Program.xls");}
 ?>
 
 <head>
-    <title>Laporan Desa Ikut Program</title>
-    <style type="text/css">
-    body,
-    td,
-    th {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        color: #000000
-    }
-
-    header {
-        display: none;
-    }
-
-    footer {
-        display: none;
-    }
-
-    .span1 {
-        margin: 1px 1px 1px 1px;
-    }
-
-    .span2 {
-        margin: 3px 3px 3px 3px
-    }
-
-    .red {
-        color: red;
-    }
-
-    .kiri {
-        width: 40%;
-        float: left;
-    }
-
-    .divright {
-        width: 60%;
-        float: right;
-        text-align: right;
-    }
-
-    .font10 {
-        font-size: 10px;
-    }
-
-    .font14 {
-        font-size: 14px;
-        font-weight: 800;
-    }
-
-    .right {
-        text-align: right
-    }
-
-    .garis-atas {
-        border-top: 1px #000 solid;
-    }
-
-    .garis-bawah {
-        border-bottom: 1px #000 solid;
-    }
-
-    .judul {
-        border-top: 1px #000 solid;
-        width: 100%;
-        display: inline-block;
-        border-bottom: 1px #000 solid;
-        padding: 10px;
-    }
-
-    .tabel {
-        border-collapse: collapse;
-        border-bottom: 1px solid #ddd;
-        width: 99%;
-        left: 1%;
-        position: relative;
-    }
-
-    .abs-right {
-        position: absolute;
-        right: 0;
-    }
-
-    .abs-left {
-        position: absolute;
-        left: 0
-    }
-    </style>
+    <title>Laporan Data Member Yang Ikut Program</title>
+    <link href="{{ asset('assets/css/printpage.css') }}" rel="stylesheet">
 </head>
 
 <body>
 
     <table class="table compact border-cell">
         <thead>
+            <tr>
+                <th colspan="7" class="judul">LAPORAN DATA MEMBER YANG IKUT PROGRAM</th>
+            </tr>
             <tr>
                 <th>#</th>
                 <th>Program</th>

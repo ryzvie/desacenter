@@ -8,113 +8,21 @@ if($btn == 1) {
 }
 else {
     header("Content-type: application/vnd-ms-excel");
-header("Content-Disposition: attachment; filename=Data Desa Ikut Program.xls");}
+    header("Content-Disposition: attachment; filename=Data Desa Yang Terdaftar.xls");}
 ?>
 
 <head>
-    <title>Laporan Desa Ikut Program</title>
-    <style type="text/css">
-    body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        color: #000000;
-    }
-
-    table,
-    th,
-    td {
-        border: 1px solid black;
-    }
-
-    header {
-        display: none;
-    }
-
-    footer {
-        display: none;
-    }
-
-    .span1 {
-        margin: 1px 1px 1px 1px;
-    }
-
-    .span2 {
-        margin: 3px 3px 3px 3px
-    }
-
-    .red {
-        color: red;
-    }
-
-    .kiri {
-        width: 40%;
-        float: left;
-    }
-
-    .divright {
-        width: 60%;
-        float: right;
-        text-align: right;
-    }
-
-    .font10 {
-        font-size: 10px;
-    }
-
-    .font14 {
-        font-size: 14px;
-        font-weight: 800;
-    }
-
-    .right {
-        text-align: right
-    }
-
-    .garis-atas {
-        border-top: 1px #000 solid;
-    }
-
-    .garis-bawah {
-        border-bottom: 1px #000 solid;
-    }
-
-    .judul {
-        border-top: 1px #000 solid;
-        width: 100%;
-        display: inline-block;
-        border-bottom: 1px #000 solid;
-        padding: 10px;
-    }
-
-    .tabel {
-        border-collapse: collapse;
-        border-bottom: 1px solid #ddd;
-        width: 99%;
-        left: 1%;
-        position: relative;
-    }
-
-    .abs-right {
-        position: absolute;
-        right: 0;
-    }
-
-    .abs-left {
-        position: absolute;
-        left: 0
-    }
-
-    table {
-        border: 1px solid #ccc;
-    }
-    </style>
+    <title>Laporan Data Desa Yang Terdaftar</title>
+    <link href="{{ asset('assets/css/printpage.css') }}" rel="stylesheet">
 </head>
 
 <body>
 
     <table class="table table-bordered">
         <thead style="background-color: #283593; color: #fff; padding: 5px">
+            <tr>
+                <th colspan="9" class="judul">LAPORAN DATA DESA YANG TERDAFTAR</th>
+            </tr>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nama Instansi</th>
