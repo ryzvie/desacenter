@@ -323,7 +323,7 @@ class AdminController extends Controller
                 ->when($namainstansi, function($query, $namainstansi){
                     return $query->where("i.nama_instansi", "LIKE", "%".$namainstansi."%");
                 })
-                ->paginate();
+                ->get();
 
         $this->id = $request->session()->get('idadmin');
 
@@ -369,7 +369,7 @@ class AdminController extends Controller
                         ->when($namainstansi, function($query, $namainstansi){
                             return $query->where("i.nama_instansi", "LIKE", "%".$namainstansi."%");
                         })
-                        ->paginate();
+                        ->get();
 
         $this->id = $request->session()->get('idadmin');
 
@@ -405,7 +405,7 @@ class AdminController extends Controller
                         ->when($namapeserta, function($query, $namapeserta){
                             return $query->where("a.nama", "LIKE", $namapeserta."%");
                         })
-                        ->paginate();
+                        ->get();
 
         $this->id = $request->session()->get('idadmin');
 
@@ -465,7 +465,7 @@ class AdminController extends Controller
                          ->when($program, function($query, $program){
                             return $query->where("d.id",  $program);
                          })
-                         ->paginate();
+                         ->get();
         
         $this->program = DB::table("mst_training as a")
                          ->where("a.reff_id","0")
@@ -526,7 +526,7 @@ class AdminController extends Controller
                             ->when($kodedesa , function($query, $kodedesa){
                                 return $query->where("a.kode_instansi", "LIKE", $kodedesa."%");
                             })
-                            ->paginate();
+                            ->get();
 
         $data = array(
             "member" => $this->getAdminData->first(),

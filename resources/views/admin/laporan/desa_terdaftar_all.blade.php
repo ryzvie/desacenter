@@ -14,13 +14,17 @@ header("Content-Disposition: attachment; filename=Data Desa Ikut Program.xls");}
 <head>
     <title>Laporan Desa Ikut Program</title>
     <style type="text/css">
-    body,
-    td,
-    th {
+    body {
         margin: 0;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 11px;
-        color: #000000
+        color: #000000;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
     }
 
     header {
@@ -99,6 +103,10 @@ header("Content-Disposition: attachment; filename=Data Desa Ikut Program.xls");}
     .abs-left {
         position: absolute;
         left: 0
+    }
+
+    table {
+        border: 1px solid #ccc;
     }
     </style>
 </head>
