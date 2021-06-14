@@ -331,10 +331,20 @@ class AdminController extends Controller
                                 ->where("a.id", $this->id)
                                 ->get();
 
+        if($btn == 1) {
+            echo "<script>
+            window.onafterprint = window.close;
+            window.print();
+            </script>";
+        }
+        else {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Laporan Data Desa Yang Terdaftar.xls");
+        }
+
         $data = array(
             "instansi_all" => $this->instansi_all,
             "member"     => $this->getAdminData->first(),
-            "btn"     => $btn,
             "inputCallback" => array(
                 "namainstansi" => $namainstansi,
             )
@@ -377,10 +387,20 @@ class AdminController extends Controller
                                 ->where("a.id", $this->id)
                                 ->get();
 
+        if($btn == 1) {
+            echo "<script>
+            window.onafterprint = window.close;
+            window.print();
+            </script>";
+        }
+        else {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Laporan Data Desa Yang Ikut Program.xls");
+        }
+        
         $data = array(
             "instansi_all" => $this->instansi_all,
             "member"     => $this->getAdminData->first(),
-            "btn"     => $btn,
             "inputCallback" => array(
                 "namainstansi" => $namainstansi,
             )
@@ -413,10 +433,20 @@ class AdminController extends Controller
                                 ->where("a.id", $this->id)
                                 ->get();
 
+        if($btn == 1) {
+            echo "<script>
+            window.onafterprint = window.close;
+            window.print();
+            </script>";
+        }
+        else {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Laporan Data Member Yang Mendaftar.xls");
+        }
+
         $data = array(
             "peserta" => $this->peserta,
             "member" => $this->getAdminData->first(),
-            "btn"     => $btn,
             "inputCallback" => array(
                 "namapeserta" => $namapeserta
             )
@@ -470,13 +500,22 @@ class AdminController extends Controller
         $this->program = DB::table("mst_training as a")
                          ->where("a.reff_id","0")
                          ->get();
-
+        
+        if($btn == 1) {
+            echo "<script>
+            window.onafterprint = window.close;
+            window.print();
+            </script>";
+        }
+        else {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Laporan Data Member Yang Ikut Program.xls");
+        }
 
         $data = array(
             "member"    => $this->getAdminData->first(),
             "peserta"   => $this->peserta,
             "program"   => $this->program,
-            "btn"   => $btn,
             "inputCallback" => array(
                 "nama"      => $namapeserta,
                 "program"   => $program
@@ -528,10 +567,20 @@ class AdminController extends Controller
                             })
                             ->get();
 
+        if($btn == 1) {
+            echo "<script>
+            window.onafterprint = window.close;
+            window.print();
+            </script>";
+        }
+        else {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=Laporan Data Total Member Per / Desa.xls");
+        }
+
         $data = array(
             "member" => $this->getAdminData->first(),
             "datamember" => $this->datamember,
-            "btn" => $btn,
             "inputCallback" => array(
                 "namadesa" => $namadesa,
                 "kodedesa" => $kodedesa

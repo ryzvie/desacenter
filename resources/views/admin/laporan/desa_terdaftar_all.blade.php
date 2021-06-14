@@ -1,15 +1,4 @@
 <html>
-<?php
-if($btn == 1) {
-    echo "<script>
-    window.onafterprint = window.close;
-    window.print();
-    </script>";
-}
-else {
-    header("Content-type: application/vnd-ms-excel");
-    header("Content-Disposition: attachment; filename=Data Desa Yang Terdaftar.xls");}
-?>
 
 <head>
     <title>Laporan Data Desa Yang Terdaftar</title>

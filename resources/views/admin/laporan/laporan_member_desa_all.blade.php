@@ -1,17 +1,5 @@
 <html>
 
-<?php
-if($btn == 1) {
-    echo "<script>
-    window.onafterprint = window.close;
-    window.print();
-    </script>";
-}
-else {
-    header("Content-type: application/vnd-ms-excel");
-    header("Content-Disposition: attachment; filename=Data Desa Ikut Program.xls");}
-?>
-
 <head>
     <title>Laporan Data Total Member Per / Desa</title>
     <link href="{{ asset('assets/css/printpage.css') }}" rel="stylesheet">
