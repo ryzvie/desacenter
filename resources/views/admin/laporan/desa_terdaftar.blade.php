@@ -88,6 +88,7 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Nama Instansi</th>
+                                        <th scope="col">Kode Instansi</th>
                                         <th scope="col">Provinsi</th>
                                         <th scope="col">Kabupaten</th>
                                         <th scope="col">Kecamatan</th>
@@ -102,6 +103,7 @@
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $datainstansi->nama }}</td>
+                                        <td>{{ $datainstansi->kode }}</td>
                                         <td>{{ $datainstansi->prov }}</td>
                                         <td>{{ $datainstansi->kab }}</td>
                                         <td>{{ $datainstansi->kec }}</td>

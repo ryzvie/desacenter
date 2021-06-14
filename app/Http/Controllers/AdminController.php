@@ -85,7 +85,7 @@ class AdminController extends Controller
         $namainstansi = $request->input("namainstansi");
 
         $this->instansi = DB::table("mst_instansi as i")
-                        ->select( "i.id_instansi", "i.nama_instansi as nama", "i.id_provinsi", "i.id_kabupaten", 
+                        ->select( "i.id_instansi", "i.nama_instansi as nama", "i.kode_instansi as kode", "i.id_provinsi", "i.id_kabupaten", 
                         "p.nama_propinsi as prov", "kb.nama_kabupaten as kab", "kc.nama_kecamatan as kec", 
                         "i.nama_kepala as kep", "i.no_wa_kepala as wa_kep", "i.nama_sekertaris as sek", 
                         "i.no_wa_sekertaris as wa_sek")
@@ -122,7 +122,7 @@ class AdminController extends Controller
         $this->instansi = DB::table("trx_pemesanan as tp")
                         ->select("m.id_instansi", "i.id_provinsi", "i.id_kabupaten", 
                         "p.nama_propinsi as prov", "kb.nama_kabupaten as kab", "kc.nama_kecamatan as kec",
-                        "i.nama_instansi as nama", "i.nama_kepala as kep", "i.no_wa_kepala as wa_kep", 
+                        "i.nama_instansi as nama", "i.kode_instansi as kode", "i.nama_kepala as kep", "i.no_wa_kepala as wa_kep", 
                         "i.nama_sekertaris as sek", "i.no_wa_sekertaris as wa_sek")
                         ->join("mst_member as m", "tp.id_member","=","m.id")
                         ->join("mst_instansi as i", "m.id_instansi","=","i.id_instansi")
@@ -312,7 +312,7 @@ class AdminController extends Controller
         $btn = $request->input("btn");
 
         $this->instansi_all = DB::table("mst_instansi as i")
-                ->select( "i.id_instansi", "i.nama_instansi as nama", "i.id_provinsi", "i.id_kabupaten", 
+                ->select( "i.id_instansi", "i.nama_instansi as nama", "i.kode_instansi as kode", "i.id_provinsi", "i.id_kabupaten", 
                 "p.nama_propinsi as prov", "kb.nama_kabupaten as kab", "kc.nama_kecamatan as kec", 
                 "i.nama_kepala as kep", "i.no_wa_kepala as wa_kep", "i.nama_sekertaris as sek", 
                 "i.no_wa_sekertaris as wa_sek")
@@ -368,7 +368,7 @@ class AdminController extends Controller
         $this->instansi_all = DB::table("trx_pemesanan as tp")
                         ->select("m.id_instansi", "i.id_provinsi", "i.id_kabupaten", 
                         "p.nama_propinsi as prov", "kb.nama_kabupaten as kab", "kc.nama_kecamatan as kec",
-                        "i.nama_instansi as nama", "i.nama_kepala as kep", "i.no_wa_kepala as wa_kep", 
+                        "i.nama_instansi as nama", "i.kode_instansi as kode", "i.nama_kepala as kep", "i.no_wa_kepala as wa_kep", 
                         "i.nama_sekertaris as sek", "i.no_wa_sekertaris as wa_sek")
                         ->join("mst_member as m", "tp.id_member","=","m.id")
                         ->join("mst_instansi as i", "m.id_instansi","=","i.id_instansi")
